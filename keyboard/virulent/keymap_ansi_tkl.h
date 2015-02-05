@@ -19,7 +19,7 @@
      */
 static const uint8_t PROGMEM keymaps[][MATRIX_ROWS][MATRIX_COLS] = {
     /* 0: qwerty + a few media keys */
-    KEYMAP(\
+    KEYMAP_ANSI_TKL(\
                                    ESC, PSCR,F1,  F2,  F3,  F4,  F5,  F6,  F7,  F8,  F9,  F10, F11, F12,  \
         DEL, PPLS,PSLS,PAST,PMNS,  GRV, 1,   2,   3,   4,   5,   6,   7,   8,   9,   0,   MINS,EQL, BSPC, \
         PGUP,HOME,   7,   8,   9,  TAB, Q,   W,   E,   R,   T,   Y,   U,   I,   O,   P,   LBRC,RBRC,BSLS, \
@@ -27,7 +27,7 @@ static const uint8_t PROGMEM keymaps[][MATRIX_ROWS][MATRIX_COLS] = {
         INS, UP,     1,   2,   3,  FN0, LSFT,Z,   X,   C,   V,   B,   N,   M,   COMM,DOT, SLSH,UP,  RSFT, \
         LEFT,DOWN,RGHT,   0, DOT,  LCTL,LGUI,     LALT,LSFT,LCTL,BSPC,SPC, DEL,      RGUI,LEFT,DOWN,RGHT),
     /* 1: media keys */
-    KEYMAP(\
+    KEYMAP_ANSI_TKL(\
                                    TRNS,TRNS,TRNS,TRNS,TRNS,TRNS,TRNS,TRNS,TRNS,TRNS,TRNS,TRNS,TRNS,TRNS, \
         1,   2,   3,   4,   5,     TRNS,TRNS,TRNS,TRNS,TRNS,TRNS,TRNS,TRNS,TRNS,TRNS,TRNS,TRNS,TRNS,TRNS, \
         Q,   W,   E,   R,   T,     TRNS,TRNS,TRNS,TRNS,TRNS,TRNS,TRNS,TRNS,TRNS,TRNS,TRNS,TRNS,TRNS,TRNS, \
