@@ -84,6 +84,9 @@ void matrix_init(void)
 #ifndef SLEEP_LED_ENABLE
     setup_leds();
 #endif
+#ifndef ROTARY_ENCODER_ENABLE
+    setup_rotary_encoder();
+#endif
 
     // initialize matrix state: all keys off
     for (uint8_t i = 0; i < MATRIX_ROWS; i++)  {

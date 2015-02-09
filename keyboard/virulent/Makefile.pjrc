@@ -50,7 +50,8 @@ TARGET_DIR = .
 # keyboard dependent files
 SRC =	keymap.c \
 	matrix.c \
-	led.c
+	led.c \
+	rotary.c
 
 CONFIG_H = config.h
 
@@ -82,7 +83,7 @@ COMMAND_ENABLE = yes    # Commands for debug and configuration
 #SLEEP_LED_ENABLE = yes  # Breathing sleep LED during USB suspend
 #NKRO_ENABLE = yes	# USB Nkey Rollover(+500)
 #PS2_MOUSE_ENABLE = yes	# PS/2 mouse(TrackPoint) support
-
+ROTARY_ENCODER_ENABLE = yes # Rotary Encoder Support (Volume Control)
 
 # Search Path
 VPATH += $(TARGET_DIR)
