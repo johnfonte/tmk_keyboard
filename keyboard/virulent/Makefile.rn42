@@ -39,9 +39,9 @@
 #----------------------------------------------------------------------------
 
 # Target file name (without extension).
-TARGET = phantom_lufa
+TARGET = virulent_rn42
 
-# Directory common source filess exist
+# Directory common source files exist
 TOP_DIR = ../..
 
 # Directory keyboard dependent files exist
@@ -51,14 +51,18 @@ TARGET_DIR = .
 # List C source files here. (C dependencies are automatically generated.)
 SRC +=	keymap.c \
 	matrix.c \
-	led.c
+	led.c \
+	rotary.c
 
-CONFIG_H = config.h
+CONFIG_H = config_rn42.h
 
 
-# MCU name
-#MCU = at90usb1287
-MCU = atmega32u4
+# MCU name, you MUST set this to match the board you are using
+# type "make clean" after changing this, so all files will be rebuilt
+#MCU = at90usb162       # Teensy 1.0
+#MCU = atmega32u4       # Teensy 2.0
+#MCU = at90usb646       # Teensy++ 1.0
+MCU = at90usb1286      # Teensy++ 2.0
 
 # Processor frequency.
 #     This will define a symbol, F_CPU, in all source code files equal to the
@@ -74,64 +78,50 @@ MCU = atmega32u4
 F_CPU = 16000000
 
 
-#
-# LUFA specific
-#
-# Target architecture (see library "Board Types" documentation).
-ARCH = AVR8
-
-# Input clock frequency.
-#     This will define a symbol, F_USB, in all source code files equal to the
-#     input clock frequency (before any prescaling is performed) in Hz. This value may
-#     differ from F_CPU if prescaling is used on the latter, and is required as the
-#     raw input clock is fed directly to the PLL sections of the AVR for high speed
-#     clock generation for the USB and other AVR subsections. Do NOT tack on a 'UL'
-#     at the end, this will be done automatically to create a 32-bit value in your
-#     source code.
-#
-#     If no clock division is performed on the input clock inside the AVR (via the
-#     CPU clock adjust registers or the clock division fuses), this will be equal to F_CPU.
-F_USB = $(F_CPU)
+# Boot Section Size in *bytes*
+#   Teensy halfKay   512
+#   Teensy++ halfKay 1024
+#   Atmel DFU loader 4096	(TMK Alt Controller)
+#   LUFA bootloader  4096
+#   USBaspLoader     2048
+OPT_DEFS += -DBOOTLOADER_SIZE=1024
 
 
 # Build Options
 #   comment out to disable the options.
 #
 BOOTMAGIC_ENABLE = yes	# Virtual DIP switch configuration(+1000)
-#MOUSEKEY_ENABLE = yes	# Mouse keys(+4700)
-EXTRAKEY_ENABLE = yes	# Audio control and System control(+450)
-CONSOLE_ENABLE = yes	# Console for debug(+400)
+#MOUSEKEY_ENABLE = yes	# Mouse keys(+5000)
+EXTRAKEY_ENABLE = yes	# Audio control and System control(+600)
+CONSOLE_ENABLE = yes    # Console for debug
 COMMAND_ENABLE = yes    # Commands for debug and configuration
-#SLEEP_LED_ENABLE = yes  # Breathing sleep LED during USB suspend
-#NKRO_ENABLE = yes	# USB Nkey Rollover - not yet supported in LUFA
-
-
-# Boot Section Size in bytes
-#   Teensy halfKay   512
-#   Atmel DFU loader 4096
-#   LUFA bootloader  4096
-OPT_DEFS += -DBOOTLOADER_SIZE=512
-
+SLEEP_LED_ENABLE = yes  # Breathing sleep LED during USB suspend
+#NKRO_ENABLE = yes	# USB Nkey Rollover(+500)
+#PS2_MOUSE_ENABLE = yes	# PS/2 mouse(TrackPoint) support
+ROTARY_ENCODER_ENABLE = yes # Rotary Encoder Support (Volume Control)
 
 # Search Path
 VPATH += $(TARGET_DIR)
 VPATH += $(TOP_DIR)
 
-include $(TOP_DIR)/protocol/lufa.mk
+include rn42.mk
+include $(TOP_DIR)/protocol.mk
+include $(TOP_DIR)/protocol/pjrc.mk
 include $(TOP_DIR)/common.mk
 include $(TOP_DIR)/rules.mk
 
-ansi: OPT_DEFS += -DLAYOUT_ANSI
-ansi: all
+debug-on: EXTRAFLAGS += -DDEBUG -DDEBUG_ACTION
+debug-on: all
 
-ansi_150: OPT_DEFS += -DLAYOUT_ANSI_150
-ansi_150: all
+debug-off: EXTRAFLAGS += -DNO_DEBUG -DNO_PRINT
+debug-off: OPT_DEFS := $(filter-out -DCONSOLE_ENABLE,$(OPT_DEFS))
+debug-off: all
 
-iso: OPT_DEFS += -DLAYOUT_ISO
-iso: all
+allkeys: OPT_DEFS += -DLAYOUT_ALLKEYS
+allkeys: all
 
-iso_150: OPT_DEFS += -DLAYOUT_ISO_150
-iso_150: all
+ansi_tk: OPT_DEFS += -DLAYOUT_ANSI_TK
+ansi_tk: all
 
-7bit: OPT_DEFS += -DLAYOUT_7BIT
-7bit: all
+ansi_tkl: OPT_DEFS += -DLAYOUT_ANSI_TKL
+ansi_tkl: all
