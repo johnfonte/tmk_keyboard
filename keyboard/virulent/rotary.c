@@ -21,6 +21,7 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
 #include "rotary.h"
 
 void setup_rotary_encoder(void) {
+  ENC_CTL &= ~(_BV(ENC_A)|_BV(ENC_B)); //inputs
   ENC_WR |= (_BV(ENC_A)|_BV(ENC_B));    //turn on pullups
   EIFR |= (_BV(ENC_FLA)|_BV(ENC_FLB));  //enable encoder pins interrupt sources
   // setting encoder flags
@@ -30,29 +31,34 @@ void setup_rotary_encoder(void) {
   EIMSK |= (_BV(ENC_MSKA)|_BV(ENC_MSKB));
 }
 
-volatile int8_t encval = 0;   //encoder value
-volatile uint8_t direction = 0; // indicates encoder direction
-
-ISR(INT7_vect) {
-	static uint8_t old_AB = 0;  //lookup table index
+static int8_t encval = 0; //encoder value
+void rotary_encoder(void) {
+  int8_t direction = 0; // indicates encoder direction
+  static uint8_t old_AB = 0;  //lookup table index
+  uint8_t encport;
   static const int8_t enc_states [] PROGMEM = {0,-1,1,0,1,0,0,-1,-1,0,0,1,0,1,-1,0};  //encoder lookup table
 
   old_AB <<=2;  //remember previous state
-  old_AB |= ( ENC_RD & 0x03 );
-  direction = pgm_read_byte(&(enc_states[( old_AB & 0x0f )]));
-  if(direction > 0) {
-    // vol up
-  } else if(direction < 0) {
-    // vol down
-  }
+  encport = ( ( ENC_RD & _BV(ENC_A) >> (ENC_A - 1) ) | ( ENC_RD & _BV(ENC_B) >> ENC_B ) );
+  old_AB |= encport;
+  old_AB = ( old_AB & 0x0f );
+  direction = pgm_read_byte(&(enc_states[old_AB]));
   encval += direction;
-  /* post "Navigation forward/reverse" event */
-  // if( encval > 3 ) {  //four steps forward
-  //   QF::publish(Q_NEW(QEvent, NAV_FWD_SIG));
-  //   encval = 0;
-  // }
-  // else if( encval < -3 ) {  //four steps backwards
-  //   QF::publish(Q_NEW(QEvent, NAV_REV_SIG));
-  //   encval = 0;
-  // }
+  if(encport == 0) {
+    if(encval > 0) {
+      // action_1
+    } else if(encval < 0) {
+      // action_2
+    }
+  }
+  encval = 0;
+
+}
+
+ISR(ENC_VECTA) {
+  rotary_encoder();
+}
+
+ISR(ENC_VECTB) {
+  rotary_encoder();
 }

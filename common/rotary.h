@@ -31,7 +31,8 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
 #define ENC_MSKB INT6	//encoder flag B
 #define ENC_A 7			//encoder pin A
 #define ENC_B 6			//encoder pin B
-// #define ENC_VECTA INT7_vect		//encoder interrupt vector
+#define ENC_VECTA INT7_vect		//encoder interrupt vector
+#define ENC_VECTB INT6_vect		//encoder interrupt vector
 
 #ifdef __cplusplus
 extern "C" {
