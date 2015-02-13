@@ -31,27 +31,23 @@ void setup_rotary_encoder(void) {
   EIMSK |= (_BV(ENC_MSKA)|_BV(ENC_MSKB));
 }
 
-static int8_t encval = 0; //encoder value
 void rotary_encoder(void) {
-  int8_t direction = 0; // indicates encoder direction
-  static uint8_t old_AB = 0;  //lookup table index
+  int8_t direction; // indicates encoder direction
+  static uint8_t old_AB = ENC_DETENT_STATE;  //lookup table index, initialized to detent state
   uint8_t encport;
   static const int8_t enc_states [] PROGMEM = {0,-1,1,0,1,0,0,-1,-1,0,0,1,0,1,-1,0};  //encoder lookup table
 
   old_AB <<=2;  //remember previous state
-  encport = ( ( ENC_RD & _BV(ENC_A) >> (ENC_A - 1) ) | ( ENC_RD & _BV(ENC_B) >> ENC_B ) );
+  encport = ( ( (ENC_RD & _BV(ENC_A)) >> (ENC_A - 1) ) | ( (ENC_RD & _BV(ENC_B)) >> ENC_B ) );
   old_AB |= encport;
-  old_AB = ( old_AB & 0x0f );
-  direction = pgm_read_byte(&(enc_states[old_AB]));
-  encval += direction;
-  if(encport == 0) {
-    if(encval > 0) {
+  direction = pgm_read_byte(&(enc_states[( old_AB & 0x0f )]));
+  if(encport == ENC_DETENT_STATE) {
+    if(direction == 1) {
       // action_1
-    } else if(encval < 0) {
+    } else if(direction == -1) {
       // action_2
     }
   }
-  encval = 0;
 
 }
 

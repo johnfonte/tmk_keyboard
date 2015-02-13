@@ -22,6 +22,7 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
 /* encoder ports */
 #include <avr/io.h>
 
+#define ENC_DETENT_STATE 0	//encoder default bit input value at detent
 #define ENC_CTL	DDRE	//encoder port control
 #define ENC_WR	PORTE	//encoder port write	
 #define ENC_RD	PINE	//encoder port read
@@ -31,8 +32,8 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
 #define ENC_MSKB INT6	//encoder flag B
 #define ENC_A 7			//encoder pin A
 #define ENC_B 6			//encoder pin B
-#define ENC_VECTA INT7_vect		//encoder interrupt vector
-#define ENC_VECTB INT6_vect		//encoder interrupt vector
+#define ENC_VECTA INT7_vect		//encoder interrupt vector A
+#define ENC_VECTB INT6_vect		//encoder interrupt vector B
 
 #ifdef __cplusplus
 extern "C" {
