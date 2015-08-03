@@ -85,7 +85,7 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
 #elif defined(LAYOUT_ANSI_TK)
     #include "keymap_ansi_tk.h"
 #else
-    #include "keymap_ansi_tkl.h"
+    #include "keymap_allkeys.h"
 #endif
 
 #define KEYMAPS_SIZE    (sizeof(keymaps) / sizeof(keymaps[0]))
