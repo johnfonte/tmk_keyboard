@@ -19,7 +19,7 @@
 
 
 #ifndef DEBOUNCE
-#   define DEBOUNCE	0
+#   define DEBOUNCE	300
 #endif
 static uint8_t debouncing = DEBOUNCE;
 
@@ -82,7 +82,7 @@ void matrix_init(void)
     unselect_cols();
     init_rows();
 #ifndef SLEEP_LED_ENABLE
-    setup_leds();
+    // setup_leds();
 #endif
 
     // initialize matrix state: all keys off
@@ -206,6 +206,8 @@ static void unselect_cols(void)
     // PORTE |= 0b01000000;
     DDRF  |= 0b11111111; // PF: 7 6 5 4 3 2 1 0
     PORTF |= 0b11111111;
+    DDRB  |= 0b00000111; // PB: 2 1 0
+    PORTB |= 0b00000111;
 }
 
 static void select_col(uint8_t col)

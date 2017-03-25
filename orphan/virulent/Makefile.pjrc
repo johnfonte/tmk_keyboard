@@ -38,11 +38,12 @@
 # To rebuild project do "make clean" then "make all".
 #----------------------------------------------------------------------------
 
+
 # Target file name (without extension).
 TARGET = virulent_pjrc
 
 # Directory common source filess exist
-TOP_DIR = ../..
+TMK_DIR = ../../tmk_core
 
 # Directory keyboard dependent files exist
 TARGET_DIR = .
@@ -71,6 +72,13 @@ MCU = at90usb1286      # Teensy++ 2.0
 F_CPU = 16000000
 
 
+# Boot Section Size in bytes
+#   Teensy halfKay   512
+#   Atmel DFU loader 4096
+#   LUFA bootloader  4096
+OPT_DEFS += -DBOOTLOADER_SIZE=512
+
+
 # Build Options
 #   comment out to disable the options.
 #
@@ -86,11 +94,11 @@ COMMAND_ENABLE = yes    # Commands for debug and configuration
 
 # Search Path
 VPATH += $(TARGET_DIR)
-VPATH += $(TOP_DIR)
+VPATH += $(TMK_DIR)
 
-include $(TOP_DIR)/protocol/pjrc.mk
-include $(TOP_DIR)/common.mk
-include $(TOP_DIR)/rules.mk
+include $(TMK_DIR)/protocol/pjrc.mk
+include $(TMK_DIR)/common.mk
+include $(TMK_DIR)/rules.mk
 
 allkeys: OPT_DEFS += -DLAYOUT_ALLKEYS
 allkeys: all
